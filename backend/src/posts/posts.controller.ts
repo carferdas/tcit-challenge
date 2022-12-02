@@ -8,27 +8,27 @@ import {
   Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { PostService } from './post.service';
+import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('posts')
-export class PostController {
-  constructor(private readonly postService: PostService) {}
+export class PostsController {
+  constructor(private readonly postsService: PostsService) {}
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+    return this.postsService.create(createPostDto);
   }
 
   @Get()
   findAll() {
-    return this.postService.findAll();
+    return this.postsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.postService.findOne(+id);
+    return this.postsService.findOne(+id);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class PostController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postService.update(+id, updatePostDto);
+    return this.postsService.update(+id, updatePostDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.postService.remove(+id);
+    return this.postsService.remove(+id);
   }
 }

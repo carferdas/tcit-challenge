@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { PostService } from './posts/post.service';
-import { PostModule } from './posts/post.module';
+import { PostsService } from './posts/posts.service';
+import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -17,9 +17,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true, // only in development, remove in production
     }),
-    PostModule,
+    PostsModule,
   ],
   controllers: [],
-  providers: [PostService],
+  providers: [PostsService],
 })
 export class AppModule {}
