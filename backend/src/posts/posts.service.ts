@@ -5,7 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
@@ -18,6 +18,7 @@ export class PostsService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createPostDto: CreatePostDto) {
@@ -56,14 +57,27 @@ export class PostsService {
     }
   }
 
-  update(id: string, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    try {
+      await this.dataSource
+        .createQueryBuilder()
+        .update(Post)
+        .set(updatePostDto)
+        .where('id = :id', { id })
+        .execute();
+
+      return this.findOne(id);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   async remove(id: string) {
     try {
       const post = await this.findOne(id);
       this.postRepository.remove(post);
+
+      return post;
     } catch (error) {
       this.handleDBExceptions(error);
     }
