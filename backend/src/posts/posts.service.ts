@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -7,13 +12,23 @@ import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
+  private readonly logger = new Logger('PostsService');
+
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  async create(createPostDto: CreatePostDto) {
+    try {
+      const post = this.postRepository.create(createPostDto);
+
+      await this.postRepository.save(post);
+
+      return post;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   findAll() {
@@ -30,5 +45,14 @@ export class PostsService {
 
   remove(id: number) {
     return `This action removes a #${id} post`;
+  }
+
+  private handleDBExceptions(error: any) {
+    if (error.code === '23505') throw new BadRequestException(error.detail);
+
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }
