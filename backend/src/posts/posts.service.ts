@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './entities/post.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class PostsService {
@@ -31,8 +32,18 @@ export class PostsService {
     }
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll(paginationDto: PaginationDto) {
+    try {
+      const { limit = 10, offset = 0 } = paginationDto;
+      const products = await this.postRepository.find({
+        take: limit,
+        skip: offset,
+      });
+
+      return products;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   findOne(id: number) {
