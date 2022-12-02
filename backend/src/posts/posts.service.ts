@@ -35,27 +35,38 @@ export class PostsService {
   async findAll(paginationDto: PaginationDto) {
     try {
       const { limit = 10, offset = 0 } = paginationDto;
-      const products = await this.postRepository.find({
+      const posts = await this.postRepository.find({
         take: limit,
         skip: offset,
       });
 
-      return products;
+      return posts;
     } catch (error) {
       this.handleDBExceptions(error);
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string) {
+    try {
+      const post = await this.postRepository.findOneBy({ id });
+
+      return post;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
+  update(id: string, updatePostDto: UpdatePostDto) {
     return `This action updates a #${id} post`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) {
+    try {
+      const post = await this.findOne(id);
+      this.postRepository.remove(post);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   private handleDBExceptions(error: any) {
