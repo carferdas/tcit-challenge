@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15.1-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: MySecr3tPassw0rd@S3c
+      POSTGRES_DB: tcit
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  backend:
+    build: ./backend
+    depends_on:
+      - postgres
+    image: backend:latest
+    ports:
+      - 3001:3001
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    image: frontend:latest
+    environment:
+      PORT: 3000
+    ports:
+      - 3000:3000
