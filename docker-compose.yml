@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./backend/postgres:/var/lib/postgresql/data
   backend:
     build: ./backend
     depends_on:
