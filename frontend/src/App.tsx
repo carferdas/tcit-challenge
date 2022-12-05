@@ -1,40 +1,29 @@
-import { useEffect, useState, useTransition } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import { Post } from './interfaces/post.interface';
-import { useSelector } from 'react-redux';
-import { useAppSelector } from './app/hooks';
+import PostSearch from './components/posts/SearchPost';
+import PostTable from './components/posts/PostTable';
+import CreatePostForm from './components/posts/CreatePostForm';
+import { fetchPosts } from './features/posts/postsThunks';
+import { useAppDispatch } from './app/hooks';
+import PaginationPost from './components/posts/PaginationPost';
+import PostError from './components/posts/PostError';
+import PostTableLength from './components/posts/PostTableLength';
 
 function App() {
-  // const [posts, setPosts] = useState<Post[]>([])
-  // const [loading, setLoading] = useState(true)
-
-  // useEffect(() => {
-  //   fetch('http://localhost:4000/api/posts')
-  //     .then(response => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       }
-
-  //       throw response;
-  //     })
-  //     .then(data => setPosts(data))
-  //     .catch(error => {
-  //       console.log(`Error fetching data: ${error}`);
-  //     })
-  //     .finally(() => setLoading(false))
-  // }, [])
-
-  // if (loading) return 'Loading...';
-
-  const postsState = useAppSelector(state => state.posts);
-  console.log(postsState)
+  const dispatch = useAppDispatch();
+  dispatch(fetchPosts())
 
   return (
-    <div className="App">
-      <h1>Posts</h1>
+    <div className="container mx-auto max-w-6xl px-4 mt-8">
+      <h1 className='text-3xl font-bold'>TCIT Challenge</h1>
+      <hr className='my-6' />
       <div className="card">
-
+        <div className='flex justify-between'>
+          <PostSearch />
+          <PostTableLength />
+        </div>
+        <PostTable />
+        <PaginationPost />
+        <PostError />
+        <CreatePostForm />
       </div>
     </div >
   )

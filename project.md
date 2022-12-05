@@ -7,6 +7,7 @@ Basic app for posts management using Node.js & Nest.js for backend, React & Redu
 - name
 - description
 - created at
+- updated at
 
 # Frontend Features
 - Create Post

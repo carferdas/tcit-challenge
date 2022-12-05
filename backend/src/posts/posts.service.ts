@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -48,13 +49,11 @@ export class PostsService {
   }
 
   async findOne(id: string) {
-    try {
-      const post = await this.postRepository.findOneBy({ id });
+    const post = await this.postRepository.findOneBy({ id });
 
-      return post;
-    } catch (error) {
-      this.handleDBExceptions(error);
-    }
+    if (!post) throw new NotFoundException(`Post with id: ${id} not found`);
+
+    return post;
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
@@ -73,14 +72,11 @@ export class PostsService {
   }
 
   async remove(id: string) {
-    try {
-      const post = await this.findOne(id);
-      this.postRepository.remove(post);
+    const post = await this.findOne(id);
 
-      return post;
-    } catch (error) {
-      this.handleDBExceptions(error);
-    }
+    this.postRepository.remove(post);
+
+    return post;
   }
 
   private handleDBExceptions(error: any) {
