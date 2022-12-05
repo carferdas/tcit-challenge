@@ -2,8 +2,8 @@
 
 Instrucciones para desplegar la aplicación con Docker (requerido):
 
-1. Clonar repositorio
-2. Renombrar el archivo ```.env.example``` de las carpetas frontend y backend a ```.env```
+1. Clonar este repositorio.
+2. Copiar los archivos ```.env.example``` de las carpetas frontend y backend a ```.env``` dentro de sus carpetas.
 3. Ejecutar el siguiente comando para levantar el backend, frontend y la base de datos:
 ```
 docker compose --env-file ./backend/.env up --build -d
