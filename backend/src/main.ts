@@ -14,7 +14,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT);
-  new Logger('Bootstrap').log(`App running on port ${process.env.PORT}`);
+  await app.listen(process.env.BACKEND_PORT);
+  new Logger('Bootstrap').log(
+    `App running on port ${process.env.BACKEND_PORT}`,
+  );
 }
 bootstrap();

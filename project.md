@@ -20,5 +20,5 @@ Basic app for posts management using Node.js & Nest.js for backend, React & Redu
 - API end points for Post resource and pagination list
 - Database with PostgreSQL
 
-# General Featuares
+# General Features
 - Docker
